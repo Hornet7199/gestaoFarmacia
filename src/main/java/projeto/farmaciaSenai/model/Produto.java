@@ -1,3 +1,4 @@
+
 package projeto.farmaciaSenai.model;
 
 import jakarta.persistence.*;
