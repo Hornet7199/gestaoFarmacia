@@ -1,16 +1,15 @@
 package projeto.farmaciaSenai.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.expression.spel.ast.OpInc;
-import projeto.farmaciaSenai.model.Venda;
+import projeto.farmaciaSenai.model.VendaModel;
 
 import java.util.Optional;
 
-public interface VendaRepository extends JpaRepository<Venda, Integer> {
+public interface VendaRepository extends JpaRepository<VendaModel, Integer> {
 
-    Optional<Venda> findById(Integer id);
+    Optional<VendaModel> findById(Integer id);
 
-    Optional<Venda> findByUsuarioId(Integer id);
+    Optional<VendaModel> findByUsuarioId(Integer id);
 
-    Optional<Venda> findByFuncionarioId(Integer id);
+    Optional<VendaModel> findByFuncionarioId(Integer id);
 }

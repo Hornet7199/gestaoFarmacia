@@ -1,13 +1,13 @@
 package projeto.farmaciaSenai.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import projeto.farmaciaSenai.model.CategoriaProduto;
+import projeto.farmaciaSenai.model.CategoriaProdutoModel;
 
 import java.util.Optional;
 
-public interface CategoriaProdutoRepository extends JpaRepository<CategoriaProduto,Integer> {
+public interface CategoriaProdutoRepository extends JpaRepository<CategoriaProdutoModel,Integer> {
 
-    Optional<CategoriaProduto> findByCategoriaId(Integer id);
+    Optional<CategoriaProdutoModel> findByIdCategoriaProduto(Integer idCategoriaProduto);
 
-    Optional<CategoriaProduto> findBynomeCategoria(String nomeCategoria);
+    Optional<CategoriaProdutoModel> findBynomeCategoria(String nomeCategoria);
 }

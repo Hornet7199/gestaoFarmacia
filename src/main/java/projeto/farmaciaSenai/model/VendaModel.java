@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "TBVENDA")
-public class Venda {
+public class VendaModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,9 +30,9 @@ public class Venda {
 
     @ManyToOne
     @JoinColumn(name = "ID_CLIENTE", nullable = false)
-    private Cliente clienteVenda;
+    private ClienteModel clienteVenda;
 
     @ManyToOne
     @JoinColumn(name = "ID_FUNCIONARIO", nullable = false)
-    private Funcionario funcionario;
+    private FuncionarioModel funcionario;
 }

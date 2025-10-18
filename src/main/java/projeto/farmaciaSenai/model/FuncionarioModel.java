@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TBFUNCIONARIO")
-public class Funcionario extends Usuario {
+public class FuncionarioModel extends UsuarioModel {
 
     @Column(name = "NIVEL_ACESSO", length = 20)
     private String nivelAcesso;

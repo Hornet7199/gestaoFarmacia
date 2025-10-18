@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TBCLIENTE")
-public class Cliente extends Usuario {
+public class ClienteModel extends UsuarioModel {
 
     @Column(name = "TIPO_PLANO_SAUDE", length = 30)
     private String tipoPlanoSaude;
@@ -23,5 +23,5 @@ public class Cliente extends Usuario {
             joinColumns = @JoinColumn(name = "ID_CLIENTE"),
             inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
     )
-    private List<Produto> historicoCompras;
+    private List<ProdutoModel> historicoCompras;
 }

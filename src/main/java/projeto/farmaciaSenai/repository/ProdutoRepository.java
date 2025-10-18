@@ -1,14 +1,23 @@
 package projeto.farmaciaSenai.repository;
 
+import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
-import projeto.farmaciaSenai.model.Produto;
+import org.springframework.stereotype.Repository;
+import projeto.farmaciaSenai.model.CategoriaProdutoModel;
+import projeto.farmaciaSenai.model.ProdutoModel;
 
 import java.util.Optional;
 
-public interface ProdutoRepository extends JpaRepository<Produto,Integer> {
+@Repository
+public interface ProdutoRepository extends JpaRepository<ProdutoModel,Integer> {
 
-    Optional<Produto> findByNomeIgnoreCase(String nome);
+    Optional<ProdutoModel> findByIdProduto(Integer idProduto);
+    Optional<ProdutoModel> findByNomeProdutoIgnoreCase(String nomeProduto);
+    Optional<ProdutoModel> findByDescricaoProdutoIgnoreCase(String descricaoProduto);
+    Optional<ProdutoModel> findByValidadeProduto(String validadeProduto);
+    Optional<ProdutoModel> findByCategoriaProduto(Integer categoriaProduto);
 
-    Optional<Produto> findByDescricaoIgnoreCase(String descricao);
+    @Transactional
+    Optional<ProdutoModel> deleteByIdProduto(Integer idProduto);
 
 }

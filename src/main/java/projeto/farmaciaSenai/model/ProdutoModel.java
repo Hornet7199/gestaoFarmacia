@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "TBPRODUTO")
-public class Produto {
+public class ProdutoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,22 +21,22 @@ public class Produto {
     @Column(name = "NOME_PRODUTO", nullable = false, length = 100)
     private String nomeProduto;
 
-    @Column(name = "DESCRICAO_PRODUTO", length = 255)
+    @Column(name = "DESCRICAO_PRODUTO")
     private String descricaoProduto;
 
     @Column(name = "PRECO_PRODUTO", nullable = false)
     private Double precoProduto;
 
     @Column(name = "QUANTIDADE_PRODUTO", nullable = false)
-    private Integer quantidadeProduto;
+    private Double quantidadeProduto;
 
-    @Column(name = "MEDIDA_PRODUTO", nullable = false)
-    private Integer medidaProduto;
+    @Column(name = "MEDIDA_PRODUTO", nullable = false, length = 20)
+    private String medidaProduto;
 
-    @Column(name = "VALIDADE_PRODUTO")
-    private Integer validadeProduto;
+    @Column(name = "VALIDADE_PRODUTO",  nullable = false, length = 20)
+    private String validadeProduto;
 
     @ManyToOne
     @JoinColumn(name = "ID_CATEGORIA_PRODUTO", nullable = false)
-    private CategoriaProduto categoriaProduto;
+    private CategoriaProdutoModel categoriaProduto;
 }

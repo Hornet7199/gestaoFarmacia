@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @Table(name = "TBCATPRODUTO")
-public class CategoriaProduto {
+public class CategoriaProdutoModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,5 +23,5 @@ public class CategoriaProduto {
     private String nomeCategoriaProduto;
 
     @OneToMany(mappedBy = "categoriaProduto", cascade = CascadeType.ALL)
-    private List<Produto> produtos;
+    private List<ProdutoModel> produtos;
 }
