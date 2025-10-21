@@ -1,7 +1,9 @@
 package projeto.farmaciaSenai.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projeto.farmaciaSenai.dto.ProdutoDto;
+import projeto.farmaciaSenai.exception.ExceptionProdutoExistente;
 import projeto.farmaciaSenai.model.ProdutoModel;
 import projeto.farmaciaSenai.repository.ProdutoRepository;
 
@@ -11,21 +13,28 @@ import java.util.Optional;
 @Service
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
+    private final ExceptionProdutoExistente exception;
 
-    public ProdutoService(ProdutoRepository produtoRepository) {
+    @Autowired
+    public ProdutoService(ProdutoRepository produtoRepository, ExceptionProdutoExistente exception) {
         this.produtoRepository = produtoRepository;
+        this.exception = exception;
     }
 
     public ProdutoModel salvarProduto(ProdutoDto dto) {
-        ProdutoModel produto = new ProdutoModel();
-        produto.setNomeProduto(dto.nomeProduto());
-        produto.setDescricaoProduto(dto.descricaoProduto());
-        produto.setMedidaProduto(dto.medidaProduto());
-        produto.setQuantidadeProduto(dto.quantidadeProduto());
-        produto.setValidadeProduto(dto.validadeProduto());
-        produto.setCategoriaProduto(dto.categoriaProduto());
-        produto.setPrecoProduto(dto.precoProduto());
-        return produtoRepository.save(produto);
+        if (produtoRepository.findByIdProduto(dto.idProduto()).isPresent()) {
+            throw new ExceptionProdutoExistente("Produto existente");
+        } else {
+            ProdutoModel produto = new ProdutoModel();
+            produto.setNomeProduto(dto.nomeProduto());
+            produto.setDescricaoProduto(dto.descricaoProduto());
+            produto.setMedidaProduto(dto.medidaProduto());
+            produto.setQuantidadeProduto(dto.quantidadeProduto());
+            produto.setValidadeProduto(dto.validadeProduto());
+            produto.setCategoriaProduto(dto.categoriaProduto());
+            produto.setPrecoProduto(dto.precoProduto());
+            return produtoRepository.save(produto);
+        }
     }
 
 

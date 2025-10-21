@@ -1,6 +1,10 @@
 package projeto.farmaciaSenai.dto;
 
 
+import jakarta.persistence.Column;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,5 +31,8 @@ public record ProdutoDto(
         String validadeProduto,
         @NotNull(message = "Categoria do produto não pode ser nulo")
         @NotBlank(message = "Categoria do produto não pode estar em branco")
-        CategoriaProdutoModel categoriaProduto
+        CategoriaProdutoModel categoriaProduto,
+        @NotNull(message = "O código do produto não pode ser nulo")
+        @NotBlank(message = "O código do produto não pode estar em branco")
+        Integer idProduto
 ) {}
