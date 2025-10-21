@@ -29,7 +29,7 @@ public class UsuarioModel {
     @Column(name = "CPF", nullable = false, unique = true, length = 14)
     private String cpf;
 
-    @Column(name = "SENHA", nullable = false, length = 255)
+    @Column(name = "SENHA", nullable = false)
     private String senha;
 
     @Pattern(regexp = "^\\(\\d{2}\\)\\s\\d{4,5}-\\d{4}$", message = "Formato do telefone inválido. Use (99) 99999-9999")

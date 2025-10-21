@@ -53,7 +53,7 @@ public class ProdutoService {
         return produtoRepository.findByCategoriaProduto(categoriaProduto);
     }
 
-    public ProdutoModel atualizarProduto(Integer idProduto, ProdutoDto dto) {
+    public Optional atualizarProduto(Integer idProduto, ProdutoDto dto) {
         return produtoRepository.findByIdProduto(idProduto).map(produto -> {
             produto.setNomeProduto(dto.nomeProduto());
             produto.setDescricaoProduto(dto.descricaoProduto());
