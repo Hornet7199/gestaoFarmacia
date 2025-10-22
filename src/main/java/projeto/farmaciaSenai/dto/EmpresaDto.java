@@ -11,5 +11,8 @@ public record EmpresaDto(
         String nomeFantasia,
         @NotNull(message = "O CNPJ não pode ser nulo")
         @NotBlank(message = "O CNPJ não pode estar em branco")
-        String cnpj
+        String cnpj,
+        @NotNull(message = "O id da empresa não pode ser nulo")
+        @NotBlank(message = "O id da empresa não pode estar em branco")
+        Integer idEmpresa
 ) {}

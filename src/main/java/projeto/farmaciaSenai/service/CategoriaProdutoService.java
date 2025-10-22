@@ -14,12 +14,12 @@ public class CategoriaProdutoService {
         this.categoriaProdutoRepository = categoriaProdutoRepository;
     }
 
-   /* public CategoriaProdutoModel salvar(CategoriaProdutoDto dto){
+         public CategoriaProdutoModel salvar(CategoriaProdutoDto dto){
         CategoriaProdutoModel categoriaProduto = new CategoriaProdutoModel();
         categoriaProduto.setNomeCategoriaProduto(dto.nomeCategoriaProduto());
         categoriaProduto.setProdutos();
 
-    }*/
+    }
 
 
 }

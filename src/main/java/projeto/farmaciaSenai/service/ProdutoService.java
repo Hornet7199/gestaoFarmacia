@@ -3,7 +3,7 @@ package projeto.farmaciaSenai.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projeto.farmaciaSenai.dto.ProdutoDto;
-import projeto.farmaciaSenai.exception.ExceptionProdutoExistente;
+import projeto.farmaciaSenai.exception.ExceptionExistente;
 import projeto.farmaciaSenai.model.ProdutoModel;
 import projeto.farmaciaSenai.repository.ProdutoRepository;
 
@@ -12,18 +12,17 @@ import java.util.Optional;
 
 @Service
 public class ProdutoService {
-    private final ProdutoRepository produtoRepository;
-    private final ExceptionProdutoExistente exception;
-
     @Autowired
-    public ProdutoService(ProdutoRepository produtoRepository, ExceptionProdutoExistente exception) {
+    private final ProdutoRepository produtoRepository;
+
+
+    public ProdutoService(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
-        this.exception = exception;
     }
 
     public ProdutoModel salvarProduto(ProdutoDto dto) {
         if (produtoRepository.findByIdProduto(dto.idProduto()).isPresent()) {
-            throw new ExceptionProdutoExistente("Produto existente");
+            throw new ExceptionExistente("Produto existente");
         } else {
             ProdutoModel produto = new ProdutoModel();
             produto.setNomeProduto(dto.nomeProduto());
