@@ -37,6 +37,6 @@ public class ProdutoModel {
     private String validadeProduto;
 
     @ManyToOne
-    @JoinColumn(name = "ID_CATEGORIA_PRODUTO", nullable = false)
+    @JoinColumn(name = "idCategoriaProduto", nullable = false)
     private CategoriaProdutoModel categoriaProduto;
 }
