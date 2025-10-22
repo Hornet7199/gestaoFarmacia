@@ -4,7 +4,6 @@ package projeto.farmaciaSenai.dto;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import projeto.farmaciaSenai.model.CategoriaProdutoModel;
 
 public record ProdutoDto(
 
@@ -27,5 +26,5 @@ public record ProdutoDto(
         String validadeProduto,
         @NotNull(message = "Categoria do produto não pode ser nulo")
         @NotBlank(message = "Categoria do produto não pode estar em branco")
-        CategoriaProdutoModel categoriaProduto
+        Integer idCategoriaProduto
 ) {}
