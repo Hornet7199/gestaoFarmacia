@@ -1,8 +1,13 @@
 package projeto.farmaciaSenai.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import projeto.farmaciaSenai.dto.CategoriaProdutoDto;
 import projeto.farmaciaSenai.dto.ProdutoDto;
+import projeto.farmaciaSenai.exception.ExceptionProdutoExistente;
+import projeto.farmaciaSenai.model.CategoriaProdutoModel;
 import projeto.farmaciaSenai.model.ProdutoModel;
+import projeto.farmaciaSenai.repository.CategoriaProdutoRepository;
 import projeto.farmaciaSenai.repository.ProdutoRepository;
 
 import java.util.List;
@@ -12,13 +17,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProdutoService {
     private final ProdutoRepository produtoRepository;
-    private final ExceptionProdutoExistente exception;
 
-    @Autowired
-    public ProdutoService(ProdutoRepository produtoRepository, ExceptionProdutoExistente exception) {
-        this.produtoRepository = produtoRepository;
-        this.exception = exception;
-    }
+    private final CategoriaProdutoRepository categoriaProdutoRepository;
+
 
     public ProdutoModel salvarProduto(ProdutoDto dto) {
         if (produtoRepository.findByIdProduto(dto.idProduto()).isPresent()) {
@@ -61,20 +62,16 @@ public class ProdutoService {
         return produtoRepository.findByCategoriaProduto(categoriaProduto);
     }
 
-    public Optional atualizarProduto(Integer idProduto, ProdutoDto dto) {
-        CategoriaProdutoModel categoria = categoriaProdutoRepository.findById(dto.idCategoriaProduto())
-                .orElseThrow(() -> new RuntimeException("Categoria não encontrada"));
-
-
-        return produtoRepository.findByIdProduto(idProduto).map(produto -> {
+    public Optional<ProdutoModel> atualizarProduto(CategoriaProdutoModel categoria, ProdutoDto dto) {
+        return produtoRepository.findByIdProduto(dto.idProduto()).map(produto -> {
             produto.setNomeProduto(dto.nomeProduto());
-            produto.setDescricaoProduto(dto.descricaoProduto());
             produto.setMedidaProduto(dto.medidaProduto());
             produto.setQuantidadeProduto(dto.quantidadeProduto());
             produto.setValidadeProduto(dto.validadeProduto());
-            produto.setCategoriaProduto(dto.categoriaProduto());
+            produto.setCategoriaProduto(categoria);
             produto.setPrecoProduto(dto.precoProduto());
             return produtoRepository.save(produto);
         });
     }
+
 }
