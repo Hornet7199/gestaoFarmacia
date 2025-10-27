@@ -1,10 +1,13 @@
 package projeto.farmaciaSenai.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import projeto.farmaciaSenai.dto.ProdutoDto;
-import projeto.farmaciaSenai.exception.ExceptionProdutoExistente;
+import projeto.farmaciaSenai.exception.ExceptionExistente;
+import projeto.farmaciaSenai.model.CategoriaProdutoModel;
 import projeto.farmaciaSenai.model.ProdutoModel;
+import projeto.farmaciaSenai.repository.CategoriaProdutoRepository;
 import projeto.farmaciaSenai.repository.ProdutoRepository;
 
 import java.util.List;
@@ -20,7 +23,7 @@ public class ProdutoService {
 
     public ProdutoModel salvarProduto(ProdutoDto dto) {
         if (produtoRepository.findByIdProduto(dto.idProduto()).isPresent()) {
-            throw new ExceptionProdutoExistente("Produto existente");
+            throw new ExceptionExistente("Produto existente");
         } else {
             ProdutoModel produto = new ProdutoModel();
             produto.setNomeProduto(dto.nomeProduto());
