@@ -17,15 +17,20 @@ public class ProdutoService {
     }
 
     public ProdutoModel salvarProduto(ProdutoDto dto) {
-        ProdutoModel produto = new ProdutoModel();
-        produto.setNomeProduto(dto.nomeProduto());
-        produto.setDescricaoProduto(dto.descricaoProduto());
-        produto.setMedidaProduto(dto.medidaProduto());
-        produto.setQuantidadeProduto(dto.quantidadeProduto());
-        produto.setValidadeProduto(dto.validadeProduto());
-        produto.setCategoriaProduto(dto.categoriaProduto());
-        produto.setPrecoProduto(dto.precoProduto());
-        return produtoRepository.save(produto);
+
+        if(produtoRepository.findByIdProduto(dto.idProduto()).isPresent(){
+
+        }else{
+            ProdutoModel produto = new ProdutoModel();
+            produto.setNomeProduto(dto.nomeProduto());
+            produto.setDescricaoProduto(dto.descricaoProduto());
+            produto.setMedidaProduto(dto.medidaProduto());
+            produto.setQuantidadeProduto(dto.quantidadeProduto());
+            produto.setValidadeProduto(dto.validadeProduto());
+            produto.setCategoriaProduto(dto.categoriaProduto());
+            produto.setPrecoProduto(dto.precoProduto());
+            return produtoRepository.save(produto);
+        }
     }
 
 

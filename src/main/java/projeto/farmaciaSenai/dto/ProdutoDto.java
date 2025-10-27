@@ -8,6 +8,8 @@ import projeto.farmaciaSenai.model.CategoriaProdutoModel;
 
 public record ProdutoDto(
 
+
+        Integer idProduto,
         @NotNull(message = "Nome do produto não pode ser nulo")
         @NotBlank(message = "Nome do produto não pode estar em branco")
         String nomeProduto,
