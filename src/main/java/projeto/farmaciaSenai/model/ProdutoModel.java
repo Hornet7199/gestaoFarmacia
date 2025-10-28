@@ -38,6 +38,6 @@ public class ProdutoModel {
     private Double precoProduto;
 
     @ManyToOne
-    @JoinColumn(name = "ID_CATEGORIA_PRODUTO", nullable = false)
+    @JoinColumn(name = "idCategoriaProduto", nullable = false)
     private CategoriaProdutoModel categoriaProduto;
 }
