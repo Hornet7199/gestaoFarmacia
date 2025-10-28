@@ -1,4 +1,3 @@
-
 package projeto.farmaciaSenai.model;
 
 import jakarta.persistence.*;
@@ -6,10 +5,12 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+import java.time.LocalDate;
+
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "TBPRODUTO")
 public class ProdutoModel {
 
@@ -21,20 +22,20 @@ public class ProdutoModel {
     @Column(name = "NOME_PRODUTO", nullable = false, length = 100)
     private String nomeProduto;
 
-    @Column(name = "DESCRICAO_PRODUTO")
+    @Column(name = "DESCRICAO_PRODUTO", length = 255)
     private String descricaoProduto;
+
+    @Column(name = "MEDIDA_PRODUTO", length = 50)
+    private String medidaProduto;
+
+    @Column(name = "QUANTIDADE_PRODUTO")
+    private Integer quantidadeProduto;
+
+    @Column(name = "VALIDADE_PRODUTO")
+    private LocalDate validadeProduto;
 
     @Column(name = "PRECO_PRODUTO", nullable = false)
     private Double precoProduto;
-
-    @Column(name = "QUANTIDADE_PRODUTO", nullable = false)
-    private Double quantidadeProduto;
-
-    @Column(name = "MEDIDA_PRODUTO", nullable = false, length = 20)
-    private String medidaProduto;
-
-    @Column(name = "VALIDADE_PRODUTO",  nullable = false, length = 20)
-    private String validadeProduto;
 
     @ManyToOne
     @JoinColumn(name = "ID_CATEGORIA_PRODUTO", nullable = false)

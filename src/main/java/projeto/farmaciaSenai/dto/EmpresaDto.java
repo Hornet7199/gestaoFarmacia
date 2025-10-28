@@ -1,15 +1,12 @@
 package projeto.farmaciaSenai.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.br.CNPJ;
 
 public record EmpresaDto(
-
-        @NotNull(message = "O nome da empresa não pode ser nulo")
-        @NotBlank(message = "O nome da empresa não pode estar em branco")
-        String nomeEmpresa,
-        String nomeFantasia,
-        @NotNull(message = "O CNPJ não pode ser nulo")
-        @NotBlank(message = "O CNPJ não pode estar em branco")
-        String cnpj
+        Integer idEmpresa,
+        @NotBlank @Size(max = 100) String nomeEmpresa,
+        @NotBlank @Size(max = 100) String nomeFantasia,
+        @NotBlank @CNPJ String cnpj
 ) {}

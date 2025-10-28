@@ -12,7 +12,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TBCLIENTE")
-public class ClienteModel extends UsuarioModel {
+public class ClienteModel{
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idusuario_id_usuario")
+    private UsuarioModel Idusuario;
 
     @Column(name = "TIPO_PLANO_SAUDE", length = 30)
     private String tipoPlanoSaude;

@@ -12,8 +12,11 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "TBFUNCIONARIO")
-public class FuncionarioModel extends UsuarioModel {
+public class FuncionarioModel{
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "idusuario_id_usuario")
+    private UsuarioModel Idusuario;
     @Column(name = "NIVEL_ACESSO", length = 20)
     private String nivelAcesso;
 

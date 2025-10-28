@@ -2,42 +2,42 @@ package projeto.farmaciaSenai.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto.farmaciaSenai.model.EmpresaModel;
-import projeto.farmaciaSenai.service.EmpresaService;
+import projeto.farmaciaSenai.model.UsuarioModel;
+import projeto.farmaciaSenai.service.UsuarioService;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/empresas")
-public class EmpresaController {
+@RequestMapping("/api/v1/usuarios")
+public class UsuarioController {
 
-    private final EmpresaService service;
+    private final UsuarioService service;
 
-    public EmpresaController(EmpresaService service) {
+    public UsuarioController(UsuarioService service) {
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<EmpresaModel> criar(@RequestBody EmpresaModel body) {
-        EmpresaModel salvo = service.salvar(body);
-        return ResponseEntity.created(URI.create("/api/v1/empresas/" + salvo.getIdEmpresa())).body(salvo);
+    public ResponseEntity<UsuarioModel> criar(@RequestBody UsuarioModel body) {
+        UsuarioModel salvo = service.salvar(body);
+        return ResponseEntity.created(URI.create("/api/v1/usuarios/" + salvo.getIdUsuario())).body(salvo);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmpresaModel>> listar() {
+    public ResponseEntity<List<UsuarioModel>> listar() {
         return ResponseEntity.ok(service.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmpresaModel> buscar(@PathVariable Integer id) {
+    public ResponseEntity<UsuarioModel> buscar(@PathVariable Integer id) {
         return service.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmpresaModel> atualizar(@PathVariable Integer id, @RequestBody EmpresaModel body) {
+    public ResponseEntity<UsuarioModel> atualizar(@PathVariable Integer id, @RequestBody UsuarioModel body) {
         return service.atualizar(id, body)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());

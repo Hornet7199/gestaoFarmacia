@@ -2,42 +2,42 @@ package projeto.farmaciaSenai.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto.farmaciaSenai.model.EmpresaModel;
-import projeto.farmaciaSenai.service.EmpresaService;
+import projeto.farmaciaSenai.model.FuncionarioModel;
+import projeto.farmaciaSenai.service.FuncionarioService;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/empresas")
-public class EmpresaController {
+@RequestMapping("/api/v1/funcionarios")
+public class FuncionarioController {
 
-    private final EmpresaService service;
+    private final FuncionarioService service;
 
-    public EmpresaController(EmpresaService service) {
+    public FuncionarioController(FuncionarioService service) {
         this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<EmpresaModel> criar(@RequestBody EmpresaModel body) {
-        EmpresaModel salvo = service.salvar(body);
-        return ResponseEntity.created(URI.create("/api/v1/empresas/" + salvo.getIdEmpresa())).body(salvo);
+    public ResponseEntity<FuncionarioModel> criar(@RequestBody FuncionarioModel body) {
+        FuncionarioModel salvo = service.salvar(body);
+        return ResponseEntity.created(URI.create("/api/v1/funcionarios/" + salvo.getIdUsuario())).body(salvo);
     }
 
     @GetMapping
-    public ResponseEntity<List<EmpresaModel>> listar() {
+    public ResponseEntity<List<FuncionarioModel>> listar() {
         return ResponseEntity.ok(service.listar());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EmpresaModel> buscar(@PathVariable Integer id) {
+    public ResponseEntity<FuncionarioModel> buscar(@PathVariable Integer id) {
         return service.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EmpresaModel> atualizar(@PathVariable Integer id, @RequestBody EmpresaModel body) {
+    public ResponseEntity<FuncionarioModel> atualizar(@PathVariable Integer id, @RequestBody FuncionarioModel body) {
         return service.atualizar(id, body)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
