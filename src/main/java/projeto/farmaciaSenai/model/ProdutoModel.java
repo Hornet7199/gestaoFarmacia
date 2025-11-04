@@ -1,16 +1,13 @@
 package projeto.farmaciaSenai.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "TBPRODUTO")
 public class ProdutoModel {
 
@@ -34,10 +31,10 @@ public class ProdutoModel {
     @Column(name = "VALIDADE_PRODUTO")
     private LocalDate validadeProduto;
 
-    @Column(name = "PRECO_PRODUTO", nullable = false)
-    private Double precoProduto;
+    @Column(name = "PRECO_PRODUTO", nullable = false, precision = 14, scale = 2)
+    private BigDecimal precoProduto;
 
-    @ManyToOne
-    @JoinColumn(name = "idCategoriaProduto", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_CATEGORIA_PRODUTO", nullable = false)
     private CategoriaProdutoModel categoriaProduto;
 }

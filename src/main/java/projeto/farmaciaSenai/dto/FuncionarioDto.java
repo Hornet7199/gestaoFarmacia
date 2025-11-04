@@ -1,21 +1,21 @@
 package projeto.farmaciaSenai.dto;
 
-import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.br.CPF;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.PositiveOrZero;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record FuncionarioDto(
-        Integer idUsuario,
-        @NotBlank @Size(max = 100) String nome,
-        @NotBlank @Email @Size(max = 100) String email,
-        @NotBlank @CPF String cpf,
-        @NotBlank String senha,
-        @Pattern(regexp = "^\\(\\d{2}\\)\\s\\d{4,5}-\\d{4}$", message = "Formato do telefone inválido. Use (99) 99999-9999")
-        String telefone,
+        Integer idFuncionario,
+
+        @NotNull Integer usuarioId,
         @Size(max = 20) String nivelAcesso,
         @Size(max = 50) String cargo,
-        LocalDate dataAdmissao,
-        @PositiveOrZero Double salario,
+        @PastOrPresent LocalDate dataAdmissao,
+
+        @PositiveOrZero BigDecimal salario,
         @Size(max = 255) String beneficios,
         Boolean flagAtivo
 ) {}

@@ -1,51 +1,51 @@
+// controller/EmpresaController.java
 package projeto.farmaciaSenai.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto.farmaciaSenai.model.EmpresaModel;
+import projeto.farmaciaSenai.dto.EmpresaDto;
 import projeto.farmaciaSenai.service.EmpresaService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/empresas")
+@RequestMapping("/empresas")
 public class EmpresaController {
 
-    private final EmpresaService service;
+    private final EmpresaService empresaService;
 
-    public EmpresaController(EmpresaService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public ResponseEntity<EmpresaModel> criar(@RequestBody EmpresaModel body) {
-        EmpresaModel salvo = service.salvar(body);
-        return ResponseEntity.created(URI.create("/api/v1/empresas/" + salvo.getIdEmpresa())).body(salvo);
+    public EmpresaController(EmpresaService empresaService) {
+        this.empresaService = empresaService;
     }
 
     @GetMapping
-    public ResponseEntity<List<EmpresaModel>> listar() {
-        return ResponseEntity.ok(service.listar());
+    public List<EmpresaDto> listar() {
+        return empresaService.listar();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<EmpresaModel> buscar(@PathVariable Integer id) {
-        return service.buscarPorId(id)
+    @GetMapping("/{idEmpresa}")
+    public ResponseEntity<EmpresaDto> buscar(@PathVariable Integer idEmpresa) {
+        return empresaService.buscar(idEmpresa)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<EmpresaModel> atualizar(@PathVariable Integer id, @RequestBody EmpresaModel body) {
-        return service.atualizar(id, body)
+    @PostMapping
+    public EmpresaDto criar(@RequestBody EmpresaDto empresaDto) {
+        return empresaService.salvar(empresaDto);
+    }
+
+    @PutMapping("/{idEmpresa}")
+    public ResponseEntity<EmpresaDto> atualizar(@PathVariable Integer idEmpresa, @RequestBody EmpresaDto empresaDto) {
+        return empresaService.atualizar(idEmpresa, empresaDto)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean ok = service.deletar(id);
-        return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @DeleteMapping("/{idEmpresa}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idEmpresa) {
+        return empresaService.deletar(idEmpresa)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

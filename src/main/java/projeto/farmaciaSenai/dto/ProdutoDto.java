@@ -1,6 +1,7 @@
 package projeto.farmaciaSenai.dto;
 
 import jakarta.validation.constraints.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record ProdutoDto(
@@ -10,6 +11,6 @@ public record ProdutoDto(
         @Size(max = 50) String medidaProduto,
         @PositiveOrZero Integer quantidadeProduto,
         LocalDate validadeProduto,
-        @NotNull @Positive Double precoProduto,
-        @NotNull Integer categoriaId
+        @NotNull @DecimalMin("0.00") BigDecimal precoProduto,
+        @NotNull Integer idCategoriaProduto
 ) {}

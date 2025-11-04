@@ -1,16 +1,12 @@
 package projeto.farmaciaSenai.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.validator.constraints.br.CPF;
 
 @Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "TBUSUARIO")
 public class UsuarioModel {
 
@@ -32,7 +28,6 @@ public class UsuarioModel {
     @Column(name = "SENHA", nullable = false)
     private String senha;
 
-    @Pattern(regexp = "^\\(\\d{2}\\)\\s\\d{4,5}-\\d{4}$", message = "Formato do telefone inválido. Use (99) 99999-9999")
     @Column(name = "TELEFONE", length = 20)
     private String telefone;
 }

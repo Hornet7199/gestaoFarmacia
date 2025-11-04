@@ -1,6 +1,8 @@
 package projeto.farmaciaSenai.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import projeto.farmaciaSenai.dto.ProdutoDto;
 import projeto.farmaciaSenai.model.CategoriaProdutoModel;
 import projeto.farmaciaSenai.model.ProdutoModel;
 import projeto.farmaciaSenai.repository.CategoriaProdutoRepository;
@@ -21,38 +23,74 @@ public class ProdutoService {
         this.categoriaProdutoRepository = categoriaProdutoRepository;
     }
 
-    public ProdutoModel salvar(ProdutoModel produto) {
-        Optional<CategoriaProdutoModel> categoria = categoriaProdutoRepository.findById(idCategoria);
-        categoria.ifPresent(produto::setCategoriaProduto);
-        return produtoRepository.save(produto);
+    private ProdutoDto toDto(ProdutoModel produtoModel) {
+        Integer idCategoria = produtoModel.getCategoriaProduto() != null
+                ? produtoModel.getCategoriaProduto().getIdCategoriaProduto()
+                : null;
+
+        return new ProdutoDto(
+                produtoModel.getIdProduto(),
+                produtoModel.getNomeProduto(),
+                produtoModel.getDescricaoProduto(),
+                produtoModel.getMedidaProduto(),
+                produtoModel.getQuantidadeProduto(),
+                produtoModel.getValidadeProduto(),
+                produtoModel.getPrecoProduto(),
+                idCategoria
+        );
     }
 
-    public List<ProdutoModel> listar() {
-        return produtoRepository.findAll();
+    private void copyFromDto(ProdutoDto produtoDto, ProdutoModel produtoModel) {
+        produtoModel.setNomeProduto(produtoDto.nomeProduto());
+        produtoModel.setDescricaoProduto(produtoDto.descricaoProduto());
+        produtoModel.setMedidaProduto(produtoDto.medidaProduto());
+        produtoModel.setQuantidadeProduto(produtoDto.quantidadeProduto());
+        produtoModel.setValidadeProduto(produtoDto.validadeProduto());
+        produtoModel.setPrecoProduto(produtoDto.precoProduto());
     }
 
-    public Optional<ProdutoModel> buscarPorId(Integer idProduto) {
-        return produtoRepository.findById(idProduto);
+    @Transactional
+    public Optional<ProdutoDto> salvar(ProdutoDto produtoDto) {
+        Optional<CategoriaProdutoModel> categoriaRelacionada =
+                categoriaProdutoRepository.findById(produtoDto.idCategoriaProduto());
+        if (categoriaRelacionada.isEmpty()) return Optional.empty();
+
+        ProdutoModel novoProduto = new ProdutoModel();
+        copyFromDto(produtoDto, novoProduto);
+        novoProduto.setCategoriaProduto(categoriaRelacionada.get());
+
+        ProdutoModel produtoSalvo = produtoRepository.save(novoProduto);
+        return Optional.of(toDto(produtoSalvo));
     }
 
-    public Optional<ProdutoModel> atualizar(Integer idProduto, ProdutoModel dados, Integer idCategoria) {
-        return produtoRepository.findById(idProduto).map(produto -> {
-            produto.setNomeProduto(dados.getNomeProduto());
-            produto.setDescricaoProduto(dados.getDescricaoProduto());
-            produto.setMedidaProduto(dados.getMedidaProduto());
-            produto.setQuantidadeProduto(dados.getQuantidadeProduto());
-            produto.setValidadeProduto(dados.getValidadeProduto());
-            produto.setPrecoProduto(dados.getPrecoProduto());
-            categoriaProdutoRepository.findById(idCategoria).ifPresent(produto::setCategoriaProduto);
-            return produtoRepository.save(produto);
+    public List<ProdutoDto> listar() {
+        return produtoRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    public Optional<ProdutoDto> buscar(Integer idProduto) {
+        return produtoRepository.findById(idProduto).map(this::toDto);
+    }
+
+    @Transactional
+    public Optional<ProdutoDto> atualizar(Integer idProduto, ProdutoDto produtoDto) {
+        return produtoRepository.findById(idProduto).map(produtoExistente -> {
+            copyFromDto(produtoDto, produtoExistente);
+            if (produtoDto.idCategoriaProduto() != null) {
+                categoriaProdutoRepository.findById(produtoDto.idCategoriaProduto())
+                        .ifPresent(produtoExistente::setCategoriaProduto);
+            }
+            ProdutoModel produtoAtualizado = produtoRepository.save(produtoExistente);
+            return toDto(produtoAtualizado);
         });
     }
 
+    @Transactional
     public boolean deletar(Integer idProduto) {
-        if (produtoRepository.existsById(idProduto)) {
-            produtoRepository.deleteById(idProduto);
-            return true;
-        }
-        return false;
+        if (!produtoRepository.existsById(idProduto)) return false;
+        produtoRepository.deleteById(idProduto);
+        return true;
     }
 }

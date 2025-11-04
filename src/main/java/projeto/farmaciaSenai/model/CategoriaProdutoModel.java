@@ -1,16 +1,12 @@
 package projeto.farmaciaSenai.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.util.List;
 
 @Entity
-@NoArgsConstructor
 @Data
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "TBCATPRODUTO")
 public class CategoriaProdutoModel {
 
@@ -22,6 +18,6 @@ public class CategoriaProdutoModel {
     @Column(name = "NOME_CATEGORIA_PRODUTO", nullable = false, length = 100)
     private String nomeCategoriaProduto;
 
-    @OneToMany(mappedBy = "categoriaProduto", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categoriaProduto", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ProdutoModel> produtos;
 }

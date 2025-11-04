@@ -2,55 +2,51 @@ package projeto.farmaciaSenai.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto.farmaciaSenai.model.VendaModel;
+import projeto.farmaciaSenai.dto.VendaDto;
 import projeto.farmaciaSenai.service.VendaService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/vendas")
+@RequestMapping("/vendas")
 public class VendaController {
 
-    private final VendaService service;
+    private final VendaService vendaService;
 
-    public VendaController(VendaService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public ResponseEntity<VendaModel> criar(@RequestBody VendaModel body,
-                                            @RequestParam Integer idCliente,
-                                            @RequestParam Integer idFuncionario) {
-        VendaModel salvo = service.salvar(body, idCliente, idFuncionario);
-        return ResponseEntity.created(URI.create("/api/v1/vendas/" + salvo.getIdVenda())).body(salvo);
+    public VendaController(VendaService vendaService) {
+        this.vendaService = vendaService;
     }
 
     @GetMapping
-    public ResponseEntity<List<VendaModel>> listar() {
-        return ResponseEntity.ok(service.listar());
+    public List<VendaDto> listar() {
+        return vendaService.listar();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<VendaModel> buscar(@PathVariable Integer id) {
-        return service.buscarPorId(id)
+    @GetMapping("/{idVenda}")
+    public ResponseEntity<VendaDto> buscar(@PathVariable Integer idVenda) {
+        return vendaService.buscar(idVenda)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<VendaModel> atualizar(@PathVariable Integer id,
-                                                @RequestBody VendaModel body,
-                                                @RequestParam Integer idCliente,
-                                                @RequestParam Integer idFuncionario) {
-        return service.atualizar(id, body, idCliente, idFuncionario)
+    @PostMapping
+    public ResponseEntity<VendaDto> criar(@RequestBody VendaDto vendaDto) {
+        return vendaService.salvar(vendaDto)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.badRequest().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean ok = service.deletar(id);
-        return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @PutMapping("/{idVenda}")
+    public ResponseEntity<VendaDto> atualizar(@PathVariable Integer idVenda, @RequestBody VendaDto vendaDto) {
+        return vendaService.atualizar(idVenda, vendaDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{idVenda}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idVenda) {
+        return vendaService.deletar(idVenda)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

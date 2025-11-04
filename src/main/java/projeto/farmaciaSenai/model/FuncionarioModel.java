@@ -1,22 +1,25 @@
 package projeto.farmaciaSenai.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "TBFUNCIONARIO")
-public class FuncionarioModel{
+public class FuncionarioModel {
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idusuario_id_usuario")
-    private UsuarioModel Idusuario;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_FUNCIONARIO")
+    private Integer idFuncionario;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_USUARIO", nullable = false)
+    private UsuarioModel usuario;
+
     @Column(name = "NIVEL_ACESSO", length = 20)
     private String nivelAcesso;
 
@@ -26,8 +29,8 @@ public class FuncionarioModel{
     @Column(name = "DATA_ADMISSAO")
     private LocalDate dataAdmissao;
 
-    @Column(name = "SALARIO")
-    private Double salario;
+    @Column(name = "SALARIO", precision = 14, scale = 2)
+    private BigDecimal salario;
 
     @Column(name = "BENEFICIOS", length = 255)
     private String beneficios;

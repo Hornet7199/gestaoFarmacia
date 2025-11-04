@@ -1,51 +1,51 @@
+// controller/UsuarioController.java
 package projeto.farmaciaSenai.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto.farmaciaSenai.model.UsuarioModel;
+import projeto.farmaciaSenai.dto.UsuarioDto;
 import projeto.farmaciaSenai.service.UsuarioService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/usuarios")
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
-    private final UsuarioService service;
+    private final UsuarioService usuarioService;
 
-    public UsuarioController(UsuarioService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public ResponseEntity<UsuarioModel> criar(@RequestBody UsuarioModel body) {
-        UsuarioModel salvo = service.salvar(body);
-        return ResponseEntity.created(URI.create("/api/v1/usuarios/" + salvo.getIdUsuario())).body(salvo);
+    public UsuarioController(UsuarioService usuarioService) {
+        this.usuarioService = usuarioService;
     }
 
     @GetMapping
-    public ResponseEntity<List<UsuarioModel>> listar() {
-        return ResponseEntity.ok(service.listar());
+    public List<UsuarioDto> listar() {
+        return usuarioService.listar();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<UsuarioModel> buscar(@PathVariable Integer id) {
-        return service.buscarPorId(id)
+    @GetMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioDto> buscar(@PathVariable Integer idUsuario) {
+        return usuarioService.buscar(idUsuario)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<UsuarioModel> atualizar(@PathVariable Integer id, @RequestBody UsuarioModel body) {
-        return service.atualizar(id, body)
+    @PostMapping
+    public UsuarioDto criar(@RequestBody UsuarioDto usuarioDto) {
+        return usuarioService.salvar(usuarioDto);
+    }
+
+    @PutMapping("/{idUsuario}")
+    public ResponseEntity<UsuarioDto> atualizar(@PathVariable Integer idUsuario, @RequestBody UsuarioDto usuarioDto) {
+        return usuarioService.atualizar(idUsuario, usuarioDto)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean ok = service.deletar(id);
-        return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @DeleteMapping("/{idUsuario}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idUsuario) {
+        return usuarioService.deletar(idUsuario)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

@@ -1,6 +1,8 @@
 package projeto.farmaciaSenai.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import projeto.farmaciaSenai.dto.CategoriaProdutoDto;
 import projeto.farmaciaSenai.model.CategoriaProdutoModel;
 import projeto.farmaciaSenai.repository.CategoriaProdutoRepository;
 
@@ -16,30 +18,49 @@ public class CategoriaProdutoService {
         this.categoriaProdutoRepository = categoriaProdutoRepository;
     }
 
-    public CategoriaProdutoModel salvar(CategoriaProdutoModel categoria) {
-        return categoriaProdutoRepository.save(categoria);
+    private CategoriaProdutoDto toDto(CategoriaProdutoModel categoriaProdutoModel) {
+        return new CategoriaProdutoDto(
+                categoriaProdutoModel.getIdCategoriaProduto(),
+                categoriaProdutoModel.getNomeCategoriaProduto()
+        );
     }
 
-    public List<CategoriaProdutoModel> listar() {
-        return categoriaProdutoRepository.findAll();
+    private void copyFromDto(CategoriaProdutoDto categoriaProdutoDto, CategoriaProdutoModel categoriaProdutoModel) {
+        categoriaProdutoModel.setNomeCategoriaProduto(categoriaProdutoDto.nomeCategoriaProduto());
     }
 
-    public Optional<CategoriaProdutoModel> buscarPorId(Integer idCategoria) {
-        return categoriaProdutoRepository.findById(idCategoria);
+    @Transactional
+    public CategoriaProdutoDto salvar(CategoriaProdutoDto categoriaProdutoDto) {
+        CategoriaProdutoModel novaCategoria = new CategoriaProdutoModel();
+        copyFromDto(categoriaProdutoDto, novaCategoria);
+        CategoriaProdutoModel categoriaSalva = categoriaProdutoRepository.save(novaCategoria);
+        return toDto(categoriaSalva);
     }
 
-    public Optional<CategoriaProdutoModel> atualizar(Integer idCategoria, CategoriaProdutoModel dados) {
-        return categoriaProdutoRepository.findById(idCategoria).map(categoria -> {
-            categoria.setNomeCategoriaProduto(dados.getNomeCategoriaProduto());
-            return categoriaProdutoRepository.save(categoria);
+    public List<CategoriaProdutoDto> listar() {
+        return categoriaProdutoRepository.findAll()
+                .stream()
+                .map(this::toDto)
+                .toList();
+    }
+
+    public Optional<CategoriaProdutoDto> buscar(Integer idCategoria) {
+        return categoriaProdutoRepository.findById(idCategoria).map(this::toDto);
+    }
+
+    @Transactional
+    public Optional<CategoriaProdutoDto> atualizar(Integer idCategoria, CategoriaProdutoDto categoriaProdutoDto) {
+        return categoriaProdutoRepository.findById(idCategoria).map(categoriaExistente -> {
+            copyFromDto(categoriaProdutoDto, categoriaExistente);
+            CategoriaProdutoModel categoriaAtualizada = categoriaProdutoRepository.save(categoriaExistente);
+            return toDto(categoriaAtualizada);
         });
     }
 
+    @Transactional
     public boolean deletar(Integer idCategoria) {
-        if (categoriaProdutoRepository.existsById(idCategoria)) {
-            categoriaProdutoRepository.deleteById(idCategoria);
-            return true;
-        }
-        return false;
+        if (!categoriaProdutoRepository.existsById(idCategoria)) return false;
+        categoriaProdutoRepository.deleteById(idCategoria);
+        return true;
     }
 }

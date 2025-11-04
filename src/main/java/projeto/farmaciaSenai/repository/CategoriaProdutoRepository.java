@@ -1,4 +1,3 @@
-
 package projeto.farmaciaSenai.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;

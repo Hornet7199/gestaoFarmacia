@@ -1,51 +1,51 @@
+// controller/CategoriaProdutoController.java
 package projeto.farmaciaSenai.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto.farmaciaSenai.model.CategoriaProdutoModel;
+import projeto.farmaciaSenai.dto.CategoriaProdutoDto;
 import projeto.farmaciaSenai.service.CategoriaProdutoService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/categorias")
+@RequestMapping("/categorias")
 public class CategoriaProdutoController {
 
-    private final CategoriaProdutoService service;
+    private final CategoriaProdutoService categoriaProdutoService;
 
-    public CategoriaProdutoController(CategoriaProdutoService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public ResponseEntity<CategoriaProdutoModel> criar(@RequestBody CategoriaProdutoModel body) {
-        CategoriaProdutoModel salvo = service.salvar(body);
-        return ResponseEntity.created(URI.create("/api/v1/categorias/" + salvo.getIdCategoriaProduto())).body(salvo);
+    public CategoriaProdutoController(CategoriaProdutoService categoriaProdutoService) {
+        this.categoriaProdutoService = categoriaProdutoService;
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoriaProdutoModel>> listar() {
-        return ResponseEntity.ok(service.listar());
+    public List<CategoriaProdutoDto> listar() {
+        return categoriaProdutoService.listar();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<CategoriaProdutoModel> buscar(@PathVariable Integer id) {
-        return service.buscarPorId(id)
+    @GetMapping("/{idCategoriaProduto}")
+    public ResponseEntity<CategoriaProdutoDto> buscar(@PathVariable Integer idCategoriaProduto) {
+        return categoriaProdutoService.buscar(idCategoriaProduto)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoriaProdutoModel> atualizar(@PathVariable Integer id, @RequestBody CategoriaProdutoModel body) {
-        return service.atualizar(id, body)
+    @PostMapping
+    public CategoriaProdutoDto criar(@RequestBody CategoriaProdutoDto categoriaProdutoDto) {
+        return categoriaProdutoService.salvar(categoriaProdutoDto);
+    }
+
+    @PutMapping("/{idCategoriaProduto}")
+    public ResponseEntity<CategoriaProdutoDto> atualizar(@PathVariable Integer idCategoriaProduto, @RequestBody CategoriaProdutoDto categoriaProdutoDto) {
+        return categoriaProdutoService.atualizar(idCategoriaProduto, categoriaProdutoDto)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean ok = service.deletar(id);
-        return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @DeleteMapping("/{idCategoriaProduto}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idCategoriaProduto) {
+        return categoriaProdutoService.deletar(idCategoriaProduto)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

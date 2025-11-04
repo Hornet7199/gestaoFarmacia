@@ -1,51 +1,53 @@
+// controller/ClienteController.java
 package projeto.farmaciaSenai.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import projeto.farmaciaSenai.model.ClienteModel;
+import projeto.farmaciaSenai.dto.ClienteDto;
 import projeto.farmaciaSenai.service.ClienteService;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/clientes")
+@RequestMapping("/clientes")
 public class ClienteController {
 
-    private final ClienteService service;
+    private final ClienteService clienteService;
 
-    public ClienteController(ClienteService service) {
-        this.service = service;
-    }
-
-    @PostMapping
-    public ResponseEntity<ClienteModel> criar(@RequestBody ClienteModel body) {
-        ClienteModel salvo = service.salvar(body);
-        return ResponseEntity.created(URI.create("/api/v1/clientes/" + salvo.getIdUsuario())).body(salvo);
+    public ClienteController(ClienteService clienteService) {
+        this.clienteService = clienteService;
     }
 
     @GetMapping
-    public ResponseEntity<List<ClienteModel>> listar() {
-        return ResponseEntity.ok(service.listar());
+    public List<ClienteDto> listar() {
+        return clienteService.listar();
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ClienteModel> buscar(@PathVariable Integer id) {
-        return service.buscarPorId(id)
+    @GetMapping("/{idCliente}")
+    public ResponseEntity<ClienteDto> buscar(@PathVariable Integer idCliente) {
+        return clienteService.buscar(idCliente)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ClienteModel> atualizar(@PathVariable Integer id, @RequestBody ClienteModel body) {
-        return service.atualizar(id, body)
+    @PostMapping
+    public ResponseEntity<ClienteDto> criar(@RequestBody ClienteDto clienteDto) {
+        return clienteService.salvar(clienteDto)
                 .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElse(ResponseEntity.badRequest().build());
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id) {
-        boolean ok = service.deletar(id);
-        return ok ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    @PutMapping("/{idCliente}")
+    public ResponseEntity<ClienteDto> atualizar(@PathVariable Integer idCliente, @RequestBody ClienteDto clienteDto) {
+        return clienteService.atualizar(idCliente, clienteDto)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/{idCliente}")
+    public ResponseEntity<Void> deletar(@PathVariable Integer idCliente) {
+        return clienteService.deletar(idCliente)
+                ? ResponseEntity.noContent().build()
+                : ResponseEntity.notFound().build();
     }
 }

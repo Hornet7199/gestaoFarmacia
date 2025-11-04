@@ -1,31 +1,24 @@
 package projeto.farmaciaSenai.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor @AllArgsConstructor
 @Table(name = "TBCLIENTE")
-public class ClienteModel{
+public class ClienteModel {
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idusuario_id_usuario")
-    private UsuarioModel Idusuario;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ID_CLIENTE")
+    private Integer idCliente;
+
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "ID_USUARIO", nullable = false)
+    private UsuarioModel usuario;
 
     @Column(name = "TIPO_PLANO_SAUDE", length = 30)
     private String tipoPlanoSaude;
-
-    @ManyToMany
-    @JoinTable(
-            name = "TB_HISTORICO_COMPRAS",
-            joinColumns = @JoinColumn(name = "ID_CLIENTE"),
-            inverseJoinColumns = @JoinColumn(name = "ID_PRODUTO")
-    )
-    private List<ProdutoModel> historicoCompras;
 }
