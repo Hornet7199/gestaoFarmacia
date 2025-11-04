@@ -30,13 +30,6 @@ public class ClienteService {
     }
 
     private ClienteDto toDto(ClienteModel clienteModel) {
-        List<Integer> historicoIds = new ArrayList<>();
-        if (clienteModel.getHistoricoCompras() != null) {
-            historicoIds = clienteModel.getHistoricoCompras()
-                    .stream()
-                    .map(ProdutoModel::getIdProduto)
-                    .toList();
-        }
 
         Integer usuarioId = null;
         if (clienteModel.getUsuario() != null) {
